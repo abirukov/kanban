@@ -16,6 +16,6 @@ def get_config() -> Config:
     return Config(
         sqlalchemy_url='sqlite:///' + os.path.join(
             basedir,
-            os.environ.get('DB_FILENAME', 'test_task_track.db'),
+            os.environ.get('DB_FILENAME', 'test_kanban.db'),
         ),
     )

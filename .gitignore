@@ -1,0 +1,10 @@
+*.log
+.vscode/
+.idea/
+env/
+.DS-Store
+__pycache__/
+/.env
+/.mypy_cache/
+*.db
+/.pytest_cache/
