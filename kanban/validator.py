@@ -59,7 +59,7 @@ class Validator:
         return self.value in BOOLEAN_SYMBOLS.keys()
 
     def validate_required(self) -> bool:
-        return self.value is not None
+        return len(self.value) > 0
 
     def validate_code(self) -> bool:
         if self.input_entity_type == InputEntities.COLUMN:

@@ -13,7 +13,7 @@ def get_user_input_values(dict_inputs: dict[str, Any], input_entity_type: InputE
         while not is_valid:
             value: Any = input(f"Please input {user_input}: ")
             is_valid = Validator(
-                value=value,
+                value=value.strip(),
                 validate_types=dict_inputs[user_input],
                 input_entity_type=input_entity_type,
             ).validate()
