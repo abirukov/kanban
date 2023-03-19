@@ -36,4 +36,4 @@ def fetch_from_db(code_or_id: str) -> Column | None:
 
 
 def get_all_by_sort():
-    return Column.query.order_by(Column.code.asc()).all()
+    return Column.query.order_by(Column.sort.asc()).all()
