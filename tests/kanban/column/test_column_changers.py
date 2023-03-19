@@ -1,6 +1,6 @@
 from db import DB_SESSION
 from kanban.column.changers import save_to_db, update_in_db, fetch_from_db_by_id, fetch_from_db_by_code, \
-    fetch_from_db, get_all_by_sort
+    fetch_from_db, get_undeleted_by_sort
 from kanban.db_models import Column
 
 
@@ -41,6 +41,6 @@ def test__fetch_from_db__id(start_column_saved):
     assert start_column_saved == column_in_db
 
 
-def test__get_all_by_sort(start_column_saved, finish_column_saved):
-    columns_list = get_all_by_sort()
+def test__get_undeleted_by_sort(start_column_saved, finish_column_saved):
+    columns_list = get_undeleted_by_sort()
     assert columns_list == [start_column_saved, finish_column_saved]

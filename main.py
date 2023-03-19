@@ -1,10 +1,14 @@
 import typer
+from rich import print
+from rich.layout import Layout
+from rich.panel import Panel
+
 from kanban.column.changers import save_to_db as column_save, fetch_from_db as column_fetch, \
-    update_in_db as column_update, get_all_by_sort
-from kanban.task.changers import save_to_db as task_save, fetch_from_db as task_fetch,\
+    update_in_db as column_update, get_undeleted_by_sort
+from kanban.task.changers import save_to_db as task_save, fetch_from_db as task_fetch, \
     update_in_db as task_update
 from kanban.column.utils import INPUT_FIELDS_AND_VALIDATORS as COLUMN_INPUTS
-from kanban.task.utils import INPUT_FIELDS_AND_VALIDATORS as TASK_INPUTS
+from kanban.task.utils import INPUT_FIELDS_AND_VALIDATORS as TASK_INPUTS, get_task_layouts
 from kanban.db_models import Column, Task
 from kanban.enums import InputEntities
 from kanban.utils import get_user_input_values
@@ -14,12 +18,29 @@ app = typer.Typer()
 
 @app.command()
 def show():
-    print("Show all")
+    layout = Layout()
+    panels = []
+    columns = get_undeleted_by_sort()
+    task_layouts_by_column_code = get_task_layouts(columns)
+    for column in columns:
+        column_layout = Layout(
+            Panel(
+                f"[bold]{column.title}[/bold] code={column.code}",
+                style=column.color,
+            ),
+            name=column.code,
+        )
+        panels.append(column_layout)
+    layout.split(*panels, splitter="row")
+    for column in columns:
+        if task_layouts_by_column_code[column.code]:
+            layout[column.code].split(*task_layouts_by_column_code[column.code])
+    print(layout)
 
 
 @app.command()
 def create():
-    columns = get_all_by_sort()
+    columns = get_undeleted_by_sort()
     if len(columns) == 0:
         raise RuntimeError("Колонки не найдены, создайте хотя бы одну")
     task_values = get_user_input_values(TASK_INPUTS, InputEntities.TASK)

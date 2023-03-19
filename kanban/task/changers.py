@@ -33,3 +33,7 @@ def fetch_from_db(code_or_id: str) -> Task | None:
     if by_id_result is not None:
         return by_id_result
     return fetch_from_db_by_code(code_or_id)
+
+
+def get_by_column_id(column_id: int) -> list[Task | None]:
+    return Task.query.filter(Task.column_id == column_id).all()

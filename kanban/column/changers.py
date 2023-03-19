@@ -1,3 +1,5 @@
+from sqlalchemy import false
+
 from db import DB_SESSION
 from kanban.db_models import Column
 
@@ -35,5 +37,9 @@ def fetch_from_db(code_or_id: str) -> Column | None:
     return fetch_from_db_by_code(code_or_id)
 
 
-def get_all_by_sort():
-    return Column.query.order_by(Column.sort.asc()).all()
+def get_undeleted_by_sort():
+    return Column.query.filter(
+        Column.is_delete == false(),
+    ).order_by(
+        Column.sort.asc(),
+    ).all()
