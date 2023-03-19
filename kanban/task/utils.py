@@ -1,5 +1,5 @@
 INPUT_FIELDS_AND_VALIDATORS = {
-    "code": "str",
+    "code": "code",
     "title": "required|str",
     "is_important": "bool",
     "description": "str",

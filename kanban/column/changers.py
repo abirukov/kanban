@@ -8,18 +8,13 @@ def save_to_db(db_model: Column) -> Column:
     return db_model
 
 
-def update_in_db(id: int, new_fields: dict) -> Column:
-    # assert db_model.id
-    # DB_SESSION.add(db_model)
-    # DB_SESSION.commit()
-    # return db_model
-    db_model = DB_SESSION.query(Column).filter(
-        Column.id == id
+def update_in_db(id: int, new_fields: dict) -> None:
+    DB_SESSION.query(Column).filter(
+        Column.id == id,
     ).update(
-        new_fields, synchronize_session=False
+        new_fields, synchronize_session=False,
     )
     DB_SESSION.commit()
-    return db_model
 
 
 def fetch_from_db_by_id(id: int) -> Column | None:
@@ -42,6 +37,3 @@ def fetch_from_db(code_or_id: str) -> Column | None:
 
 def get_all_by_sort():
     return Column.query.order_by(Column.code.asc()).all()
-
-
-

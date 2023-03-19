@@ -24,7 +24,7 @@ class Task(Base):
     def __repr__(self) -> str:
         return f"Task id: {self.id}, title: {self.title}, code: {self.code}, is_important: {self.is_important}, " \
                f"description: {self.description}, created_at: {self.created_at}, updated_at: {self.updated_at}, " \
-               f"deadline: {self.deadline}, is_delete: {self.is_delete}, columns_id: {self.columns_id}"
+               f"deadline: {self.deadline}, is_delete: {self.is_delete}, column_id: {self.column_id}"
 
 
 class Column(Base):

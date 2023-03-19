@@ -4,8 +4,8 @@ from typing import Any
 import dateutil
 from dateutil import parser
 
-from kanban.column.model import fetch_from_db_by_id as column_fetch_from_db_by_id
-from kanban.task.model import fetch_from_db_by_id as task_fetch_from_db_by_id
+from kanban.column.changers import fetch_from_db as column_fetch_from_db
+from kanban.task.changers import fetch_from_db as task_fetch_from_db
 from kanban.enums import Colors, InputEntities
 
 BOOLEAN_SYMBOLS = {
@@ -18,7 +18,11 @@ BOOLEAN_SYMBOLS = {
 }
 
 VALIDATE_ERROR_DESCRIPTIONS = {
-
+    "code": "Код уже используется или совпадает с существующим id",
+    "int": "Введите целое число",
+    "bool": "Поддерживается ввод Y, y, 1, N, n, 0",
+    "datetime": "Введите дату или время в свободной форме",
+    "required|str": "Обязательное значение",
 }
 
 
@@ -56,12 +60,12 @@ class Validator:
 
     def validate_required(self) -> bool:
         return self.value is not None
-    
+
     def validate_code(self) -> bool:
         if self.input_entity_type == InputEntities.COLUMN:
-            entity = column_fetch_from_db_by_id(self.value)
+            entity = column_fetch_from_db(self.value)
         else:
-            entity = task_fetch_from_db_by_id(self.value)
+            entity = task_fetch_from_db(self.value)
         return entity is None
 
     def validate_datetime(self) -> bool:

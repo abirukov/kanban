@@ -1,6 +1,6 @@
 INPUT_FIELDS_AND_VALIDATORS = {
-    "code":  "code",
+    "code": "code",
     "title": "required|str",
     "color": "color",
-    "sort":  "int",
+    "sort": "int",
 }

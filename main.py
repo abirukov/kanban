@@ -1,9 +1,7 @@
 import typer
-from dateutil import parser
-
-from kanban.column.model import save_to_db as column_save, fetch_from_db as column_fetch, \
+from kanban.column.changers import save_to_db as column_save, fetch_from_db as column_fetch, \
     update_in_db as column_update, get_all_by_sort
-from kanban.task.model import save_to_db as task_save, fetch_from_db as task_fetch,\
+from kanban.task.changers import save_to_db as task_save, fetch_from_db as task_fetch,\
     update_in_db as task_update
 from kanban.column.utils import INPUT_FIELDS_AND_VALIDATORS as COLUMN_INPUTS
 from kanban.task.utils import INPUT_FIELDS_AND_VALIDATORS as TASK_INPUTS
@@ -23,7 +21,7 @@ def show():
 def create():
     columns = get_all_by_sort()
     if len(columns) == 0:
-        raise "Колонки не найдены, создайте хотя бы одну"
+        raise RuntimeError("Колонки не найдены, создайте хотя бы одну")
     task_values = get_user_input_values(TASK_INPUTS, InputEntities.TASK)
     task_values["column_id"] = columns[0].id
     task_save(Task(**task_values))
@@ -47,7 +45,7 @@ def delete(code_or_id: str):
     if task is None:
         print("Задача не найдена")
     else:
-        task_update(task.id, {"is_deleted": True})
+        task_update(task.id, {"is_delete": True})
         print("Задача удалена")
 
 
@@ -61,7 +59,7 @@ def move(code_or_id: str, column_code_or_id: str):
         if column is None:
             print("Колонка не найдена")
         else:
-            task_update(task.id, {"columns_id": column.id})
+            task_update(task.id, {"column_id": column.id})
             print("Задача перемещена")
 
 
@@ -89,7 +87,7 @@ def delete_column(column_code_or_id: str):
     if column is None:
         print("Колонка не найдена")
     else:
-        column_update(column.id, {"is_deleted": True})
+        column_update(column.id, {"is_delete": True})
         print("Колонка удалена")
 
 

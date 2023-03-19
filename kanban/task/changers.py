@@ -8,18 +8,13 @@ def save_to_db(db_model: Task) -> Task:
     return db_model
 
 
-def update_in_db(id: int, new_fields: dict) -> Task:
-    # assert db_model.id
-    # DB_SESSION.add(db_model)
-    # DB_SESSION.commit()
-    # return db_model
-    db_model = DB_SESSION.query(Task).filter(
-        Task.id == id
+def update_in_db(id: int, new_fields: dict) -> None:
+    DB_SESSION.query(Task).filter(
+        Task.id == id,
     ).update(
-        new_fields, synchronize_session=False
+        new_fields, synchronize_session=False,
     )
     DB_SESSION.commit()
-    return db_model
 
 
 def fetch_from_db_by_id(id: int) -> Task | None:
@@ -38,9 +33,3 @@ def fetch_from_db(code_or_id: str) -> Task | None:
     if by_id_result is not None:
         return by_id_result
     return fetch_from_db_by_code(code_or_id)
-
-
-
-
-
-

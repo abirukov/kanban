@@ -5,6 +5,6 @@ style:
 types:
 	mypy .
 tests:
-	pytest --lf -vv
+	pytest --lf -vv --cov .
 check:
 	make style types tests
