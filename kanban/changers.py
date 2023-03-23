@@ -1,5 +1,3 @@
-from sqlalchemy import false
-
 from db import DB_SESSION
 from kanban.db_models import Column, Task
 from kanban.enums import Entities

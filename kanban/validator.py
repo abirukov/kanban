@@ -9,8 +9,6 @@ from kanban.enums import Colors, Entities
 from kanban.utils import fetch_from_db
 
 
-
-
 @dataclass
 class Validator:
     value: Any
