@@ -1,5 +1,7 @@
 from enum import Enum
 
+from kanban.db_models import Column, Task
+
 
 class Colors(Enum):
     BLACK = "black"
@@ -207,6 +209,6 @@ class Colors(Enum):
     GREY93 = "grey93"
 
 
-class InputEntities(Enum):
-    COLUMN = "column"
-    TASK = "task"
+class Entities(Enum):
+    COLUMN = Column
+    TASK = Task

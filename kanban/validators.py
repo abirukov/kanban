@@ -4,33 +4,18 @@ from typing import Any
 import dateutil
 from dateutil import parser
 
-from kanban.column.changers import fetch_from_db as column_fetch_from_db
-from kanban.task.changers import fetch_from_db as task_fetch_from_db
-from kanban.enums import Colors, InputEntities
+from kanban.constants import BOOLEAN_SYMBOLS
+from kanban.enums import Colors, Entities
+from kanban.utils import fetch_from_db
 
-BOOLEAN_SYMBOLS = {
-    "1": True,
-    "y": True,
-    "Y": True,
-    "0": False,
-    "n": False,
-    "N": False,
-}
 
-VALIDATE_ERROR_DESCRIPTIONS = {
-    "code": "Код уже используется или совпадает с существующим id",
-    "int": "Введите целое число",
-    "bool": "Поддерживается ввод Y, y, 1, N, n, 0",
-    "datetime": "Введите дату или время в свободной форме",
-    "required|str": "Обязательное значение",
-}
 
 
 @dataclass
 class Validator:
     value: Any
     validate_types: str
-    input_entity_type: InputEntities
+    input_entity_type: Entities
 
     def validate(self) -> bool:
         last_validate_result = True
@@ -61,11 +46,8 @@ class Validator:
     def validate_required(self) -> bool:
         return len(self.value) > 0
 
-    def validate_code(self) -> bool:
-        if self.input_entity_type == InputEntities.COLUMN:
-            entity = column_fetch_from_db(self.value)
-        else:
-            entity = task_fetch_from_db(self.value)
+    def validate_code(self, db_entity: Entities) -> bool:
+        entity = fetch_from_db(self.value, db_entity)
         return entity is None
 
     def validate_datetime(self) -> bool:
