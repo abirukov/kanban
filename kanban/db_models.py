@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum
 
 from sqlalchemy import ForeignKey, func, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -40,3 +41,8 @@ class Column(Base):
     def __repr__(self) -> str:
         return f"Column id: {self.id}, code: {self.code}, title: {self.title}, color: {self.color}, " \
                f"sort: {self.sort}, is_delete: {self.is_delete}"
+
+
+class Entities(Enum):
+    COLUMN = Column
+    TASK = Task

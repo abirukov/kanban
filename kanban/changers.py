@@ -1,6 +1,5 @@
 from db import DB_SESSION
-from kanban.db_models import Column, Task
-from kanban.enums import Entities
+from kanban.db_models import Column, Task, Entities
 
 
 class Changer:
@@ -33,3 +32,13 @@ class Changer:
         ).order_by(
             self.type.sort.asc(),
         ).all()
+
+    def fetch_from_db(self, code_or_id: str) -> Column | Task | None:
+        try:
+            int_code_or_id = int(code_or_id)
+            by_id_result = self.fetch_from_db_by_id(int_code_or_id)
+        except ValueError:
+            by_id_result = None
+        if by_id_result is not None:
+            return by_id_result
+        return self.fetch_from_db_by_code(code_or_id)

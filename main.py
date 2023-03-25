@@ -5,9 +5,8 @@ from rich.panel import Panel
 
 from kanban.changers import Changer
 from kanban.constants import COLUMN_INPUT_FIELDS_AND_VALIDATORS, TASK_INPUT_FIELDS_AND_VALIDATORS
-from kanban.db_models import Column, Task
-from kanban.enums import Entities
-from kanban.utils import ask_questions, fetch_from_db, get_task_layouts
+from kanban.db_models import Column, Task, Entities
+from kanban.utils import ask_questions, get_task_layouts
 
 app = typer.Typer()
 
@@ -48,7 +47,7 @@ def create():
 def update(code_or_id: str):
     print("Сделать вывод карточки")
     new_task_values = ask_questions(TASK_INPUT_FIELDS_AND_VALIDATORS, Entities.TASK)
-    task = fetch_from_db(code_or_id, Entities.TASK)
+    task = Changer(Entities.TASK).fetch_from_db(code_or_id)
     if task is None:
         print("Задача не найдена")
     else:
@@ -58,7 +57,7 @@ def update(code_or_id: str):
 
 @app.command()
 def delete(code_or_id: str):
-    task = fetch_from_db(code_or_id, Entities.TASK)
+    task = Changer(Entities.TASK).fetch_from_db(code_or_id)
     if task is None:
         print("Задача не найдена")
     else:
@@ -68,11 +67,11 @@ def delete(code_or_id: str):
 
 @app.command()
 def move(code_or_id: str, column_code_or_id: str):
-    task = fetch_from_db(code_or_id, Entities.TASK)
+    task = Changer(Entities.TASK).fetch_from_db(code_or_id)
     if task is None:
         print("Задача не найдена")
     else:
-        column = fetch_from_db(column_code_or_id, Entities.COLUMN)
+        column = Changer(Entities.COLUMN).fetch_from_db(column_code_or_id)
         if column is None:
             print("Колонка не найдена")
         else:
@@ -90,7 +89,7 @@ def create_column():
 def update_column(column_code_or_id: str) -> None:
     print("Сделать вывод карточки")
     new_column_values = ask_questions(COLUMN_INPUT_FIELDS_AND_VALIDATORS, Entities.COLUMN)
-    column = fetch_from_db(column_code_or_id, Entities.COLUMN)
+    column = Changer(Entities.COLUMN).fetch_from_db(column_code_or_id)
     if column is None:
         print("Колонка не найдена")
     else:
@@ -100,7 +99,7 @@ def update_column(column_code_or_id: str) -> None:
 
 @app.command()
 def delete_column(column_code_or_id: str):
-    column = fetch_from_db(column_code_or_id, Entities.COLUMN)
+    column = Changer(Entities.COLUMN).fetch_from_db(column_code_or_id)
     if column is None:
         print("Колонка не найдена")
     else:
