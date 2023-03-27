@@ -3,9 +3,9 @@ from typing import Any
 import dateutil
 from dateutil import parser
 
-from kanban.changers import Changer
 from kanban.constants import BOOLEAN_SYMBOLS
 from kanban.db_models import Entities
+from kanban.db_utils import fetch_from_db
 from kanban.enums import Colors
 
 
@@ -27,15 +27,18 @@ def validate_color(value: Any) -> bool:
 
 
 def validate_bool(value: Any) -> bool:
-    return value in BOOLEAN_SYMBOLS.keys()
+    return value in BOOLEAN_SYMBOLS
 
 
 def validate_required(value: Any) -> bool:
-    return len(value) > 0
+    if isinstance(value, str):
+        return len(value) > 0
+    else:
+        return type(value) is None
 
 
 def validate_code(value: Any, db_entity: Entities) -> bool:
-    entity = Changer(db_entity).fetch_from_db(value)
+    entity = fetch_from_db(db_entity, value)
     return entity is None
 
 

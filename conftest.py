@@ -5,8 +5,8 @@ import pytest
 import typer
 
 from db import DB_SESSION
-from kanban.db_models import Column, Task, Entities
-from kanban.changers import Changer
+from kanban.db_models import Column, Task
+from kanban.db_utils import save_to_db
 
 
 @pytest.fixture
@@ -31,7 +31,7 @@ def deleted_column():
 
 @pytest.fixture
 def start_column_saved(start_column):
-    Changer(Entities.COLUMN).save_to_db(start_column)
+    save_to_db(start_column)
     yield start_column
     Column.query.filter_by(id=start_column.id).delete()
     DB_SESSION.commit()
@@ -39,7 +39,7 @@ def start_column_saved(start_column):
 
 @pytest.fixture
 def finish_column_saved(finish_column):
-    Changer(Entities.COLUMN).save_to_db(finish_column)
+    save_to_db(finish_column)
     yield finish_column
     Column.query.filter_by(id=finish_column.id).delete()
     DB_SESSION.commit()
@@ -47,7 +47,7 @@ def finish_column_saved(finish_column):
 
 @pytest.fixture
 def deleted_column_saved(deleted_column):
-    Changer(Entities.COLUMN).save_to_db(deleted_column)
+    save_to_db(deleted_column)
     yield deleted_column
     Column.query.filter_by(id=deleted_column.id).delete()
     DB_SESSION.commit()
@@ -75,7 +75,7 @@ def test_task():
 @pytest.fixture
 def test_task_saved(test_task, start_column_saved):
     test_task.column_id = start_column_saved.id
-    Changer(Entities.TASK).save_to_db(test_task)
+    save_to_db(test_task)
     yield test_task
     Task.query.filter_by(id=test_task.id).delete()
     DB_SESSION.commit()
