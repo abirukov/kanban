@@ -6,8 +6,7 @@ import typer
 
 from db import DB_SESSION
 from kanban.db_models import Column, Task
-from kanban.column.changers import save_to_db as column_save
-from kanban.task.changers import save_to_db as task_save
+from kanban.db_utils import save_to_db
 
 
 @pytest.fixture
@@ -32,7 +31,7 @@ def deleted_column():
 
 @pytest.fixture
 def start_column_saved(start_column):
-    column_save(start_column)
+    save_to_db(start_column)
     yield start_column
     Column.query.filter_by(id=start_column.id).delete()
     DB_SESSION.commit()
@@ -40,7 +39,7 @@ def start_column_saved(start_column):
 
 @pytest.fixture
 def finish_column_saved(finish_column):
-    column_save(finish_column)
+    save_to_db(finish_column)
     yield finish_column
     Column.query.filter_by(id=finish_column.id).delete()
     DB_SESSION.commit()
@@ -48,7 +47,7 @@ def finish_column_saved(finish_column):
 
 @pytest.fixture
 def deleted_column_saved(deleted_column):
-    column_save(deleted_column)
+    save_to_db(deleted_column)
     yield deleted_column
     Column.query.filter_by(id=deleted_column.id).delete()
     DB_SESSION.commit()
@@ -56,14 +55,14 @@ def deleted_column_saved(deleted_column):
 
 @pytest.fixture
 def main_print_mock():
-    with (patch("main.print") as print_mock):
+    with patch("main.print") as print_mock:
         yield print_mock
 
 
 @pytest.fixture
-def main_get_input_values_mock():
-    with (patch("main.get_user_input_values") as main_get_user_input_values_mock):
-        yield main_get_user_input_values_mock
+def utils_ask_questions_mock():
+    with patch("main.ask_questions") as utils_ask_questions_mock:
+        yield utils_ask_questions_mock
 
 
 @pytest.fixture
@@ -76,7 +75,7 @@ def test_task():
 @pytest.fixture
 def test_task_saved(test_task, start_column_saved):
     test_task.column_id = start_column_saved.id
-    task_save(test_task)
+    save_to_db(test_task)
     yield test_task
     Task.query.filter_by(id=test_task.id).delete()
     DB_SESSION.commit()

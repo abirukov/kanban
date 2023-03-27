@@ -205,8 +205,3 @@ class Colors(Enum):
     GREY85 = "grey85"
     GREY89 = "grey89"
     GREY93 = "grey93"
-
-
-class InputEntities(Enum):
-    COLUMN = "column"
-    TASK = "task"
